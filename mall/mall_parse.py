@@ -17,14 +17,16 @@ def get_train_data(mallid):
     userMallSet_m=pd.read_csv('data/userMallSet_'+mallid+'_origin.csv')
     le=preprocessing.LabelEncoder()
     train_y=le.fit_transform(userMallSet_m['shop_id'])
-    train_x=preprocessing.scale(userMallSet_m[['longitude_x','latitude_x']])
+    # print(train_y)
+    train_x=userMallSet_m[['longitude_x','latitude_x']]
     return train_x,train_y,le
 
 
 def get_test_data(mallid):
     evaluationSet=pd.read_csv('evaluation_public.csv')
     evaluationSet_m=evaluationSet[evaluationSet.mall_id==mallid]
-    test_x=preprocessing.scale(evaluationSet_m[['longitude','latitude']])
+    test_x=evaluationSet_m[['longitude','latitude']]
+    # print(test_x.count())
     return test_x,evaluationSet_m[['row_id']]
 
 # model = tree.DecisionTreeClassifier()
@@ -76,7 +78,7 @@ def run_predict(mallid):
 
 def run_train(mallid):
     train_x,train_y,le=get_train_data(mallid)
-    
+    # print(train_x.count())
     # test_model(train_x,train_y)
     model=train(train_x,train_y)
     # saveModel(model,mallid)
@@ -103,14 +105,32 @@ def gogogo(mallid):
     predict=model.predict(test_X)
     # print(le.inverse_transform(predict))
     data['shop_id']=le.inverse_transform(predict)
-    data.to_csv('t_result.csv',mode = 'a', index=False)
+    # print(data.count())
+    data.to_csv('out/'+mallid+'_result.csv',header=False,index=False)
+
+def tetete(mallid):
+    print(mallid)
+    df=pd.read_csv('out/'+mallid+'_result.csv')
+
+   
 
 mallAll=pd.read_csv('evaluation_public.csv')
-print(mallAll.count())
+# row_id        483931
+# print(mallAll.count())
 mall=mallAll[['mall_id']].drop_duplicates()
 # print(mall)
+# gogogo('m_3916')
 # for i,row in mall.iterrows():
 #     print(row['mall_id'])
 #     gogogo(row['mall_id'])
 
-mall.applymap(lambda x: gogogo(x))
+# mall.applymap(lambda x: gogogo(x))
+
+list_ = []
+for i,row in mall.iterrows():
+    df=pd.read_csv('out/'+row['mall_id']+'_result.csv',index_col=None, header=0)
+    list_.append(df)
+
+frame = pd.concat(list_,ignore_index=True,axis=1)
+print(list_)
+   
