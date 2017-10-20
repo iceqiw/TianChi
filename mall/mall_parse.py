@@ -106,7 +106,7 @@ def gogogo(mallid):
     # print(le.inverse_transform(predict))
     data['shop_id']=le.inverse_transform(predict)
     # print(data.count())
-    data.to_csv('out/'+mallid+'_result.csv',header=False,index=False)
+    data.to_csv('out/'+mallid+'_result.csv',index=False)
 
 def tetete(mallid):
     print(mallid)
@@ -128,9 +128,10 @@ mall=mallAll[['mall_id']].drop_duplicates()
 
 list_ = []
 for i,row in mall.iterrows():
-    df=pd.read_csv('out/'+row['mall_id']+'_result.csv',index_col=None, header=0)
+    df=pd.read_csv('out/'+row['mall_id']+'_result.csv')
     list_.append(df)
 
-frame = pd.concat(list_,ignore_index=True,axis=1)
-print(list_)
-   
+frame = pd.concat(list_)
+
+print(frame.count())
+frame.to_csv('t_result.csv',index=False)
