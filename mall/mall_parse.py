@@ -124,14 +124,16 @@ mall=mallAll[['mall_id']].drop_duplicates()
 #     print(row['mall_id'])
 #     gogogo(row['mall_id'])
 
-# mall.applymap(lambda x: gogogo(x))
+mall.applymap(lambda x: gogogo(x))
 
-list_ = []
-for i,row in mall.iterrows():
-    df=pd.read_csv('out/'+row['mall_id']+'_result.csv')
-    list_.append(df)
 
-frame = pd.concat(list_)
+#----------------------------------------------------
+# list_ = []
+# for i,row in mall.iterrows():
+#     df=pd.read_csv('out/'+row['mall_id']+'_result.csv')
+#     list_.append(df)
 
-print(frame.count())
-frame.to_csv('t_result.csv',index=False)
+# frame = pd.concat(list_)
+
+# print(frame.count())
+# frame.to_csv('t_result.csv',index=False)
